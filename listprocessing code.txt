@@ -1,0 +1,314 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <cstring>
+using namespace std;
+
+int searchResults[20];
+
+void fillArray(string n[], char eid[][6], double w[], int us[], int lsize);
+
+void displayTable(string n[], char eid[][6], double w[], int us[], int lsize);
+
+void searchID(char eid[][6], int lsize, int &index);
+
+void displayEmployee(string n[], char eid[][6], double w[], int us[], int index);
+
+void changeUnitSold(int us[], int index);
+
+void changeWage(double w[], int index);
+
+void sortByEmpID(string n[], char eid[][6], double w[], int us[], int lsize);
+
+void searchName(string n[], int lsize);
+
+int main()
+{
+    const int lsize = 20;
+    string n[20];
+    char eid[20][6];
+    double w[20];
+    int us[20];
+    char userInput;
+    int index;
+
+    fillArray(n, eid, w, us, lsize);
+
+
+    cout << "===================================" << endl;
+    cout << "  List Processing Practice         " << endl;
+    cout << "  programmed by Heather Shores     " << endl;
+    cout << "===================================" << endl;
+
+    cout << "            -------                " << endl;
+    cout << "             Menu                  " << endl;
+    cout << "            -------                " << endl;
+
+    cout << "   [A] Display table               " << endl;
+    cout << "   [B] Search by ID                " << endl;
+    cout << "   [C] Change Unit Sold            " << endl;
+    cout << "   [D] Change Wage                 " << endl;
+    cout << "   [E] Sort by Employee ID         " << endl;
+    cout << "   [F] Search by Name              " << endl;
+    cout << "   [G] Exit Program                " << endl;
+
+    cout << "-----------------------------------" << endl;
+    cout << "   Make Your selection :>          ";
+
+    cin >> userInput;
+
+    switch(userInput){
+        case 'A':
+        case 'a':
+            displayTable(n, eid, w, us, lsize);
+            break;
+        case 'B':
+        case 'b':
+            searchID(eid, lsize, index);
+            displayEmployee(n, eid, w, us, index);
+            break;
+        case 'C':
+        case 'c':
+            searchID(eid, lsize, index);
+            changeUnitSold(us, index);
+            break;
+        case 'D':
+        case 'd':
+            searchID(eid, lsize, index);
+            changeWage(w, index);
+            break;
+        case 'E':
+        case 'e':
+            sortByEmpID(n, eid, w, us, lsize);
+            break;
+        case 'F':
+        case 'f':
+            searchName(n, lsize);
+            break;
+        case 'G':
+        case 'g':
+            cout << "Good Bye...Exit Program" << endl;
+            break;
+    }
+
+    return 0;
+}
+
+void fillArray(string n[], char eid[][6], double w[], int us[], int lsize){
+    ifstream file;
+    file.open("C:\\classdata\\salesdata.txt");
+
+    if (!file)
+    {
+        cout << "Your file didn't work.";
+    }
+
+    for (int i= 0; i < 20; i++){
+        getline(file, n[i]);
+    }
+
+    for (int i = 0; i < 20; i++){
+        file >> eid[i];
+    }
+
+    for (int i = 0; i< 20; i++){
+        file >> w[i];
+    }
+
+    for (int i = 0; i< 20; i++){
+        file >> us[i];
+    }
+
+    file.close();
+}
+
+void displayTable(string n[], char eid[][6], double w[], int us[], int lsize){
+    char userInput;
+    cout << left << setw(12) << "Employee Name: " << right << setw(13) << "Employee ID: " << setw(9) << "Wages: " << right << setw(14) << "Units Sold: " << endl;
+    for (int i = 0; i < 20; i++){
+    cout << left << setw(12) << n[i] << right << setw(12) << eid[i] << right << setw(12) << w[i] << right << setw(12) << us[i] << endl;
+    }
+    cout << "Do you want to run the program again? ";
+    cin >> userInput;
+    if(userInput == 'y' || userInput == 'Y'){
+        main();
+    }
+    else{
+        cout << "Goodbye...Exit Program" << endl;
+    }
+}
+
+void searchID(char eid[][6], int lsize, int &index){
+    bool found = false;
+    string emp;
+
+    cout << "Search for employee ID: ";
+    cin >> emp;
+
+    for(int i = 0; i < 20; i++)
+    {
+        if(eid[i] == emp)
+        {
+            index = i;
+            found = true;
+        }
+    }
+    if (!found)
+    {
+        index = -1;
+    }
+}
+
+void displayEmployee(string n[], char eid[][6], double w[], int us[], int index){
+    char userInput;
+    if(index == -1){
+        cout << "Error: Employees was not found\n";
+    }
+    else{
+        cout << n[index] << "\t" << eid[index] << "\t" << w[index] << "\t" << us[index] << endl;
+    }
+
+    cout << "Do you want to run the program again? ";
+    cin >> userInput;
+    if(userInput == 'y' || userInput == 'Y'){
+        main();
+    }
+    else{
+        cout << "Goodbye...Exit Program" << endl;
+    }
+}
+void changeUnitSold(int us[], int index){
+    int value;
+    char userInput;
+
+    if(index != -1){
+        cout << "Please enter new value of units sold for this employee: ";
+        cin >> value;
+        us[index] = value;
+        cout << "Thank you, the units sold for this employee has been changed to " << value << endl;
+
+    }
+    cout << "Do you want to run the program again? ";
+    cin >> userInput;
+    if(userInput == 'y' || userInput == 'Y'){
+        main();
+    }
+    else{
+        cout << "Goodbye...Exit Program" << endl;
+    }
+}
+void changeWage(double w[], int index){
+    double value;
+    char userInput;
+
+    if(index != 1){
+        cout << "Please enter the new wage for this employee: ";
+        cin >> value;
+        w[index] = value;
+        cout << "Thank you, the employee's wage has changed to " << value << endl;
+    }
+    cout << "Do you want to run the program again? ";
+    cin >> userInput;
+    if(userInput == 'y' || userInput == 'Y'){
+        main();
+    }
+    else{
+        cout << "Goodbye...Exit Program" << endl;
+    }
+}
+void sortByEmpID(string n[], char eid[][6], double w[], int us[], int lsize){
+    bool notsorted = true;
+    int j = 1;
+    char tmp[6];
+    string tmp2;
+    double tmp3;
+    int tmp4;
+    char userInput;
+
+    while(notsorted){
+        notsorted = false;
+        j++;
+        for(int i =0; i < 20; i++){
+            if(strcmp (eid[i], eid[i + 1]) > 0){
+
+                strcpy(tmp, eid[i]);
+                strcpy(eid[i],eid[i + 1]);
+                strcpy(eid[i + 1], tmp);
+
+                tmp2 = n[i];
+                n[i] = n[i + 1];
+                n[i + 1] = tmp2;
+
+
+                tmp3 = w[i];
+                w[i] = w[i + 1];
+                w[i + 1] = tmp3;
+
+
+                tmp4 = us[i];
+                us[i] = us[i + 1];
+                us[i + 1] = tmp4;
+                notsorted = true;
+            }
+        }
+    }
+        for(int i = 0; i < 20; i++){
+            if(strcmp (eid[i], eid[i + 1]) > 0){
+                notsorted = true;
+            }
+        }
+
+        for(int i = 0; i < 20; i++){
+        cout << left << setw(12) << n[i] << right << setw(12) << eid[i] << right << setw(12) << w[i] << right << setw(12) << us[i] << endl;
+        }
+
+    cout << "Do you want to run the program again? ";
+    cin >> userInput;
+    if(userInput == 'y' || userInput == 'Y'){
+        main();
+    }
+    else{
+        cout << "Goodbye...Exit Program" << endl;
+    }
+}
+void searchName(string n[], int lsize){
+    int searchResult[20];
+    string searchString;
+    int j;
+    char userInput;
+
+    int searchCount = 0;
+
+    cout << "Enter the letter for the name you are search for: ";
+    cin >> searchString;
+
+    for (int i = 0; i < lsize; i++) {
+    searchString[i] = toupper(searchString[i]);
+    }
+
+    for (int i = 0; i < lsize; i++){
+        if(searchString[0] == n[i][0]){
+            searchResult[searchCount] = i;
+            searchCount++;
+            }
+    }
+
+    cout << "Here are your search results: ";
+    for(int i = 0; i < searchCount; i++){
+    j = searchResult[i];
+    cout << n[j] << endl;
+    }
+
+    cout << "Do you want to run the program again? ";
+    cin >> userInput;
+    if(userInput == 'y' || userInput == 'Y'){
+        main();
+    }
+    else{
+        cout << "Goodbye...Exit Program" << endl;
+    }
+}
+
+
+
