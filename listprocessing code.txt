@@ -37,8 +37,8 @@ int main()
 
 
     cout << "===================================" << endl;
-    cout << "  List Processing Practice         " << endl;
-    cout << "  programmed by Heather Shores     " << endl;
+    cout << "  List Processing Program          " << endl;
+    cout << "                                   " << endl;
     cout << "===================================" << endl;
 
     cout << "            -------                " << endl;
